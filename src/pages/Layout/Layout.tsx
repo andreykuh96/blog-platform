@@ -11,8 +11,12 @@ const Layout: React.FC = () => {
           <MyButton type="text">Realworld Blog</MyButton>
         </Link>
         <div className={s.btns}>
-          <MyButton type="text">Sign In</MyButton>
-          <MyButton type="default">Sign Up</MyButton>
+          <Link to="/sign-in">
+            <MyButton type="text">Sign In</MyButton>
+          </Link>
+          <Link to="/sign-up">
+            <MyButton type="default">Sign Up</MyButton>
+          </Link>
         </div>
       </div>
       <div className={s.main}>
