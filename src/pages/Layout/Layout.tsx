@@ -15,7 +15,9 @@ const Layout: React.FC = () => {
             <MyButton type="text">Sign In</MyButton>
           </Link>
           <Link to="/sign-up">
-            <MyButton type="default">Sign Up</MyButton>
+            <MyButton color="#52C41A" type="default">
+              Sign Up
+            </MyButton>
           </Link>
         </div>
       </div>

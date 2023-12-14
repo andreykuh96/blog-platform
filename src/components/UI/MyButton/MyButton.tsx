@@ -4,25 +4,29 @@ import React from 'react';
 
 interface MyButtonProps {
   children: React.ReactNode;
-  type?: 'link' | 'text' | 'default' | 'primary' | 'dashed' | undefined;
+  type?: 'link' | 'text' | 'default' | 'primary' | 'dashed';
   size?: SizeType;
+  block?: boolean;
+  color?: string;
+  htmlType?: 'button' | 'submit' | 'reset';
 }
 
-const MyButton: React.FC<MyButtonProps> = ({ children, type = 'text', size = 'large' }) => {
+const MyButton: React.FC<MyButtonProps> = ({ children, type = 'text', size, block, color, htmlType }) => {
   return (
     <ConfigProvider
       theme={{
         components: {
           Button: {
-            defaultBorderColor: '#52C41A',
-            defaultColor: '#52C41A',
-            colorPrimaryHover: '#52C41A',
-            colorPrimaryActive: '#52C41A',
+            colorPrimary: color,
+            colorPrimaryHover: color,
+            colorPrimaryActive: color,
+            defaultBorderColor: color,
+            defaultColor: color,
           },
         },
       }}
     >
-      <Button size={size} type={type}>
+      <Button htmlType={htmlType} block={block} size={size} type={type}>
         {children}
       </Button>
     </ConfigProvider>
