@@ -143,7 +143,6 @@ const MyForm: React.FC<MyFormProps> = ({
           <span>Avatar image (url)</span>
           <input
             {...register('avatar', {
-              required: 'Required field',
               pattern: {
                 value: /^(ftp|http|https):\/\/[^ "]+$/,
                 message: 'avatar image must be a valid url',
