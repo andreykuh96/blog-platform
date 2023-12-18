@@ -4,5 +4,11 @@ export interface IFormData {
   password?: string;
   repeatPassword?: string;
   agree?: boolean;
-  avatar?: string;
+  image?: string;
+}
+
+export interface BadResponse {
+  errors: {
+    'email or password': string;
+  };
 }

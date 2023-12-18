@@ -9,9 +9,10 @@ interface MyButtonProps {
   block?: boolean;
   color?: string;
   htmlType?: 'button' | 'submit' | 'reset';
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const MyButton: React.FC<MyButtonProps> = ({ children, type = 'text', size, block, color, htmlType }) => {
+const MyButton: React.FC<MyButtonProps> = ({ children, type = 'text', size, block, color, htmlType, onClick }) => {
   return (
     <ConfigProvider
       theme={{
@@ -26,7 +27,7 @@ const MyButton: React.FC<MyButtonProps> = ({ children, type = 'text', size, bloc
         },
       }}
     >
-      <Button htmlType={htmlType} block={block} size={size} type={type}>
+      <Button onClick={onClick} htmlType={htmlType} block={block} size={size} type={type}>
         {children}
       </Button>
     </ConfigProvider>

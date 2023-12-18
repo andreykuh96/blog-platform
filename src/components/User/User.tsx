@@ -5,7 +5,7 @@ import { UserOutlined } from '@ant-design/icons';
 
 interface UserProps {
   username: string;
-  createdAt: string;
+  createdAt?: string;
   image: string;
 }
 
@@ -20,7 +20,7 @@ const User: React.FC<UserProps> = ({ username, createdAt, image }) => {
     <div className={s.user}>
       <div className={s.about}>
         <div className={s.name}>{username}</div>
-        <div className={s.date}>{formatDate(createdAt)}</div>
+        {createdAt && <div className={s.date}>{formatDate(createdAt ? createdAt : '')}</div>}
       </div>
       <Avatar size={46} icon={image ? <img src={image} alt="User Avatar" /> : <UserOutlined />} />
     </div>

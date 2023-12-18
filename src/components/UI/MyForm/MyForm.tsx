@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import s from './MyForm.module.scss';
 import { IFormData } from '../../../types/form.types';
+import { Alert } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { onCloseError } from '../../../store/reducers/userSlice/userSlice';
 
 interface MyFormProps {
   getFormData: (data: IFormData) => void;
@@ -29,6 +32,8 @@ const MyForm: React.FC<MyFormProps> = ({
   subText,
   redirect,
 }) => {
+  const userError = useAppSelector((state) => state.userSlice.error);
+  const dispatch = useAppDispatch();
   const {
     register,
     formState: { errors },
@@ -54,114 +59,133 @@ const MyForm: React.FC<MyFormProps> = ({
       .join(' ');
   }
 
+  const onClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (e.target) {
+      dispatch(onCloseError(null));
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      <div className={s.title}>{title}</div>
-      {addName && (
-        <label className={s.label}>
-          <span>Username</span>
-          <input
-            {...register('username', {
-              required: 'Required field',
-              minLength: { value: 3, message: 'Minimum 3 characters' },
-              maxLength: { value: 20, message: 'Maximum 20 characters' },
-            })}
-            placeholder="Username"
-            type="text"
-            className={!errors?.username ? s.input : `${s.input} ${s.input_error}`}
-          />
-          {errors?.username && <p className={s.error}>{`${errors?.username?.message}`}</p>}
-        </label>
+    <>
+      {userError && (
+        <Alert
+          style={{ maxWidth: 400, margin: '0 auto' }}
+          banner
+          message={userError}
+          description="Email or Password already in use"
+          type="error"
+          closable
+          onClose={onClose}
+        />
       )}
-      {addEmail && (
-        <label className={s.label}>
-          <span>Email address</span>
-          <input
-            {...register('email', {
-              required: 'Required field',
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: 'email must be a valid mail address',
-              },
-            })}
-            placeholder="Email address"
-            type="email"
-            className={!errors?.email ? s.input : `${s.input} ${s.input_error}`}
-          />
-          {errors?.email && <p className={s.error}>{`${errors?.email?.message}`}</p>}
-        </label>
-      )}
-      {addPassword && (
-        <label className={s.label}>
-          <span>Password</span>
-          <input
-            {...register('password', {
-              required: 'Required field',
-              minLength: { value: 6, message: 'Minimum 6 characters' },
-              maxLength: { value: 40, message: 'Maximum 40 characters' },
-            })}
-            placeholder="Password"
-            type="password"
-            className={!errors?.password ? s.input : `${s.input} ${s.input_error}`}
-          />
-          {errors?.password && <p className={s.error}>{`${errors?.password?.message}`}</p>}
-        </label>
-      )}
-      {addRepeatPassword && (
-        <label className={s.label}>
-          <span>Repeat Password</span>
-          <input
-            {...register('repeatPassword', {
-              required: 'Required field',
-              validate: (value) => value === password || 'Passwords must match',
-            })}
-            placeholder="Password"
-            type="password"
-            className={!errors?.repeatPassword ? s.input : `${s.input} ${s.input_error}`}
-          />
-          {errors?.repeatPassword && <p className={s.error}>{`${errors?.repeatPassword?.message}`}</p>}
-        </label>
-      )}
-      {addAgree && (
-        <>
-          <hr />
-          <label className={s.checkbox}>
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+        <div className={s.title}>{title}</div>
+        {addName && (
+          <label className={s.label}>
+            <span>Username</span>
             <input
-              {...register('agree', {
-                required: 'the checkbox for consent to the processing of personal data must be checked',
+              {...register('username', {
+                required: 'Required field',
+                minLength: { value: 3, message: 'Minimum 3 characters' },
+                maxLength: { value: 20, message: 'Maximum 20 characters' },
               })}
-              type="checkbox"
-              className={s.input}
+              placeholder="Username"
+              type="text"
+              className={!errors?.username ? s.input : `${s.input} ${s.input_error}`}
             />
-            <span>I agree to the processing of my personal information</span>
-            {errors?.agree && <p className={s.error}>{`${errors?.agree?.message}`}</p>}
+            {errors?.username && <p className={s.error}>{`${errors?.username?.message}`}</p>}
           </label>
-        </>
-      )}
-      {addUrl && (
-        <label className={s.label}>
-          <span>Avatar image (url)</span>
-          <input
-            {...register('avatar', {
-              pattern: {
-                value: /^(ftp|http|https):\/\/[^ "]+$/,
-                message: 'avatar image must be a valid url',
-              },
-            })}
-            placeholder="Avatar image"
-            type="text"
-            className={!errors?.avatar ? s.input : `${s.input} ${s.input_error}`}
-          />
-          {errors?.avatar && <p className={s.error}>{`${errors?.avatar?.message}`}</p>}
-        </label>
-      )}
-      <input value={subText} className={s.submit} type="submit" />
-      {redirect && (
-        <div className={s.redirect}>
-          Already have an account? <Link to={redirect}>{convertPathToText(redirect)}</Link>.
-        </div>
-      )}
-    </form>
+        )}
+        {addEmail && (
+          <label className={s.label}>
+            <span>Email address</span>
+            <input
+              {...register('email', {
+                required: 'Required field',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: 'email must be a valid mail address',
+                },
+              })}
+              placeholder="Email address"
+              type="email"
+              className={!errors?.email ? s.input : `${s.input} ${s.input_error}`}
+            />
+            {errors?.email && <p className={s.error}>{`${errors?.email?.message}`}</p>}
+          </label>
+        )}
+        {addPassword && (
+          <label className={s.label}>
+            <span>Password</span>
+            <input
+              {...register('password', {
+                required: 'Required field',
+                minLength: { value: 6, message: 'Minimum 6 characters' },
+                maxLength: { value: 40, message: 'Maximum 40 characters' },
+              })}
+              placeholder="Password"
+              type="password"
+              className={!errors?.password ? s.input : `${s.input} ${s.input_error}`}
+            />
+            {errors?.password && <p className={s.error}>{`${errors?.password?.message}`}</p>}
+          </label>
+        )}
+        {addRepeatPassword && (
+          <label className={s.label}>
+            <span>Repeat Password</span>
+            <input
+              {...register('repeatPassword', {
+                required: 'Required field',
+                validate: (value) => value === password || 'Passwords must match',
+              })}
+              placeholder="Password"
+              type="password"
+              className={!errors?.repeatPassword ? s.input : `${s.input} ${s.input_error}`}
+            />
+            {errors?.repeatPassword && <p className={s.error}>{`${errors?.repeatPassword?.message}`}</p>}
+          </label>
+        )}
+        {addAgree && (
+          <>
+            <hr />
+            <label className={s.checkbox}>
+              <input
+                {...register('agree', {
+                  required: 'the checkbox for consent to the processing of personal data must be checked',
+                })}
+                type="checkbox"
+                className={s.input}
+              />
+              <span>I agree to the processing of my personal information</span>
+              {errors?.agree && <p className={s.error}>{`${errors?.agree?.message}`}</p>}
+            </label>
+          </>
+        )}
+        {addUrl && (
+          <label className={s.label}>
+            <span>Avatar image (url)</span>
+            <input
+              {...register('image', {
+                pattern: {
+                  value: /^(ftp|http|https):\/\/[^ "]+$/,
+                  message: 'avatar image must be a valid url',
+                },
+              })}
+              placeholder="Avatar image"
+              type="text"
+              className={!errors?.image ? s.input : `${s.input} ${s.input_error}`}
+            />
+            {errors?.image && <p className={s.error}>{`${errors?.image?.message}`}</p>}
+          </label>
+        )}
+        <input value={subText} className={s.submit} type="submit" />
+        {redirect && (
+          <div className={s.redirect}>
+            Already have an account? <Link to={redirect}>{convertPathToText(redirect)}</Link>.
+          </div>
+        )}
+      </form>
+    </>
   );
 };
 
