@@ -25,7 +25,12 @@ export const blogApi = createApi({
           : [{ type: 'Articles', id: 'LIST' }],
     }),
     getAnArticle: build.query<ResponseAnArticle, string>({
-      query: (slug) => `articles/${slug}`,
+      query: (slug) => ({
+        url: `articles/${slug}`,
+        headers: {
+          Authorization: `Bearer ${getTokenFromLS()}`,
+        },
+      }),
       providesTags: ['Article'],
     }),
     deleteArticle: build.mutation({
