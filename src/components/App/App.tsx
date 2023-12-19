@@ -13,6 +13,10 @@ import AuthUser from '../HOK/AuthUser';
 import CreateArticlePage from '../../pages/CreateArticlePage/CreateArticlePage';
 import EditArticlePage from '../../pages/EditArticlePage/EditArticlePage';
 
+export const getTokenFromLS = () => {
+  return localStorage.getItem('token');
+};
+
 const App: React.FC = () => {
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();

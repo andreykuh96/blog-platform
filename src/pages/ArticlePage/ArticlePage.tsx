@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { deleteAnArticle, getAnArticle } from '../../store/reducers/articleSlice/articleThunk';
+import { useAppSelector } from '../../store/hooks';
 import s from './ArticlePage.module.scss';
 import ArticleHeader from '../../components/ArticleHeader/ArticleHeader';
 import ArticleTags from '../../components/ArticleTags/ArticleTags';
@@ -10,56 +9,49 @@ import User from '../../components/User/User';
 import ReactMarkdown from 'react-markdown';
 import { Result, Spin } from 'antd';
 import MyButton from '../../components/UI/MyButton/MyButton';
+import { useDeleteArticleMutation, useGetAnArticleQuery } from '../../store/blogApi';
 
 const ArticlePage: React.FC = () => {
-  const { article, loading, error } = useAppSelector((state) => state.articleSlice);
   const user = useAppSelector((state) => state.userSlice.user);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { slug } = useParams();
+  const { data, isError, isLoading, error } = useGetAnArticleQuery(slug ? slug : '');
+  const [deleteArticle] = useDeleteArticleMutation();
 
-  React.useEffect(() => {
-    if (slug) {
-      dispatch(getAnArticle(slug));
-    }
-  }, [dispatch, slug]);
-
-  const deleteArticle = () => {
-    if (slug) {
-      dispatch(deleteAnArticle(slug));
-      navigate('/', { replace: true });
-    }
+  const onDeleteArticle = async () => {
+    await deleteArticle(slug);
+    navigate('/', { replace: true });
   };
 
   return (
     <>
-      {article && (
+      {data?.article && (
         <div className={s.article}>
-          {error ? <Result status="warning" title={error} /> : null}
-          {loading ? (
+          {isError ? <Result status="warning" title={JSON.stringify(error)} /> : null}
+          {isLoading ? (
             <Spin size="large" />
           ) : (
             <>
               <div className={s.header}>
                 <div className={s.body}>
                   <ArticleHeader
-                    favorited={article.favorited}
-                    favoritesCount={article.favoritesCount}
-                    title={article.title}
-                    slug={article.slug}
+                    favorited={data.article.favorited}
+                    favoritesCount={data.article.favoritesCount}
+                    title={data.article.title}
+                    slug={data.article.slug}
                   />
-                  <ArticleTags tagList={article.tagList} />
-                  <ArticleDescr description={article.description} />
+                  <ArticleTags tagList={data.article.tagList} />
+                  <ArticleDescr description={data.article.description} />
                 </div>
-                {user?.username === article.author.username ? (
+                {user?.username === data.article.author.username ? (
                   <div className={s.authUser}>
                     <User
-                      username={article.author.username}
-                      createdAt={article.createdAt}
-                      image={article.author.image}
+                      username={data.article.author.username}
+                      createdAt={data.article.createdAt}
+                      image={data.article.author.image}
                     />
                     <div className={s.btns}>
-                      <MyButton onClick={deleteArticle} color="#F5222D" type="default">
+                      <MyButton onClick={onDeleteArticle} color="#F5222D" type="default">
                         delete
                       </MyButton>
                       <Link to={`/articles/${slug}/edit`}>
@@ -70,10 +62,14 @@ const ArticlePage: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <User username={article.author.username} createdAt={article.createdAt} image={article.author.image} />
+                  <User
+                    username={data.article.author.username}
+                    createdAt={data.article.createdAt}
+                    image={data.article.author.image}
+                  />
                 )}
               </div>
-              <ReactMarkdown className={s.markdown}>{article.body}</ReactMarkdown>
+              <ReactMarkdown className={s.markdown}>{data.article.body}</ReactMarkdown>
             </>
           )}
         </div>
