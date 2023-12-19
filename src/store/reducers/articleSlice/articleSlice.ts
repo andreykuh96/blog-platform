@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IArticle } from '../../../types/article.types';
-import { createAnArticle, deleteAnArticle, getAllArticles, getAnArticle, updateAnArticle } from './articleThunk';
+import { deleteAnArticle, getAllArticles, getAnArticle, updateAnArticle } from './articleThunk';
 
 interface ArticleState {
   articles: IArticle[];
@@ -58,16 +58,6 @@ const articleSlice = createSlice({
       .addCase(getAnArticle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'my unknown error';
-      })
-      //createAnArticle
-      .addCase(createAnArticle.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createAnArticle.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.articles.unshift(action.payload.article);
       })
       //deleteAnArticle
       .addCase(deleteAnArticle.fulfilled, (state, action) => {

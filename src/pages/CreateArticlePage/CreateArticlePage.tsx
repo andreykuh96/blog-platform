@@ -5,11 +5,18 @@ import { useAppDispatch } from '../../store/hooks';
 import { createAnArticle } from '../../store/reducers/articleSlice/articleThunk';
 import { IFormData } from '../../types/form.types';
 import { ICreateArticleRequest } from '../../types/article.types';
-import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 
 const CreateArticlePage: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Article successfully added',
+    });
+  };
 
   const getDataNewArticle = (data: IFormData) => {
     const newArticle: ICreateArticleRequest = {
@@ -21,11 +28,12 @@ const CreateArticlePage: React.FC = () => {
       },
     };
     dispatch(createAnArticle(newArticle));
-    navigate('/', { replace: true });
+    success();
   };
 
   return (
     <div className={s.createArticle}>
+      {contextHolder}
       <MyForm
         addTags
         addText
