@@ -2,39 +2,33 @@ import React from 'react';
 import s from './ListPage.module.scss';
 import ArticleCard from '../../components/ArticleCard/ArticleCard';
 import MyPagination from '../../components/UI/MyPagination/MyPagination';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getAllArticles } from '../../store/reducers/articleSlice/articleThunk';
 import { Result, Spin } from 'antd';
-import { changeCurrentPage } from '../../store/reducers/articleSlice/articleSlice';
+import { useGetAllArticlesQuery } from '../../store/blogApi';
 
 const ListPage: React.FC = () => {
-  const { articles, loading, error, articlesCount, currentPage } = useAppSelector((state) => state.articleSlice);
-  const dispatch = useAppDispatch();
-
-  React.useEffect(() => {
-    dispatch(getAllArticles(currentPage * 5 - 5));
-  }, [dispatch, currentPage]);
+  const [currentPage, setcurrentPage] = React.useState(1);
+  const { data, isLoading, isError, error } = useGetAllArticlesQuery(currentPage * 5 - 5);
 
   const onChangeCurrentPage = (page: number): void => {
-    dispatch(changeCurrentPage(page));
+    setcurrentPage(page);
   };
 
   return (
     <div className={s.listPage}>
-      {error ? <Result status="warning" title={error} /> : null}
-      {loading ? (
+      {isError ? <Result status="warning" title={`${JSON.stringify(error)}`} /> : null}
+      {isLoading ? (
         <Spin size="large" />
       ) : (
         <>
           <div className={s.list}>
-            {articles.map((item) => (
+            {data?.articles.map((item) => (
               <ArticleCard {...item} key={item.slug} />
             ))}
           </div>
           <MyPagination
             onChange={onChangeCurrentPage}
             current={currentPage}
-            total={articlesCount}
+            total={data?.articlesCount}
             pageSize={5}
             showSizeChanger={false}
           />
