@@ -11,6 +11,14 @@ interface ArticleHeaderProps {
 }
 
 const ArticleHeader: React.FC<ArticleHeaderProps> = ({ slug, title, favoritesCount, favorited }) => {
+  const formatLongString = (str: string): string => {
+    if (str.length > 50) {
+      return str.slice(0, 50) + '...';
+    } else {
+      return str;
+    }
+  };
+
   return (
     <div className={s.header}>
       {slug.length > 1000 ? (
@@ -19,7 +27,7 @@ const ArticleHeader: React.FC<ArticleHeaderProps> = ({ slug, title, favoritesCou
         </div>
       ) : (
         <Link to={`/articles/${slug}`} className={s.title}>
-          {title}
+          {formatLongString(title)}
         </Link>
       )}
       <MyStatistic favorited={favorited} slug={slug} favoritesCount={favoritesCount} />
