@@ -37,7 +37,12 @@ export const getAnArticle = createAsyncThunk<ResponseAnArticle, string, { reject
 export const createAnArticle = createAsyncThunk<ICreateArticleResponse, ICreateArticleRequest, { rejectValue: string }>(
   'article/createAnArticle',
   async (body) => {
-    const response = await KataApi.post<ICreateArticleResponse>('articles', body);
+    const response = await KataApi.post<ICreateArticleResponse>('articles', body, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   }
 );
