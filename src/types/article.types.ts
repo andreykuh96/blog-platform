@@ -1,3 +1,5 @@
+import { IUser } from './user.types';
+
 export interface IAuthor {
   username: string;
   image: string;
@@ -24,4 +26,33 @@ export interface ResponseAllArticles {
 
 export interface ResponseAnArticle {
   article: IArticle;
+}
+
+export interface ICreateArticleRequest {
+  article?: {
+    title?: string;
+    description?: string;
+    body?: string;
+    tagList?: string[];
+  };
+}
+
+export interface ICreateArticleResponse {
+  article: {
+    slug: string;
+    title: string;
+    description: string;
+    body: string;
+    createdAt: string;
+    updatedAt: string;
+    tagList: string[];
+    favorited: boolean;
+    favoritesCount: number;
+    author: {
+      username: string;
+      bio: string;
+      image: string;
+      following: boolean;
+    };
+  };
 }

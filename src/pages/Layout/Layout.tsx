@@ -37,7 +37,7 @@ const Layout: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/">
+              <Link to="/new-article">
                 <MyButton color="#52C41A" type="default">
                   Create article
                 </MyButton>

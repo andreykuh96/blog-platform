@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { updateUserFromLS } from '../../store/reducers/userSlice/userSlice';
 import NotAuthUser from '../HOK/NotAuthUser';
 import AuthUser from '../HOK/AuthUser';
+import CreateArticlePage from '../../pages/CreateArticlePage/CreateArticlePage';
+import EditArticlePage from '../../pages/EditArticlePage/EditArticlePage';
 
 const App: React.FC = () => {
   const user = useAppSelector((state) => state.userSlice.user);
@@ -39,6 +41,22 @@ const App: React.FC = () => {
           element={
             <NotAuthUser user={user}>
               <ProfilePage />
+            </NotAuthUser>
+          }
+        />
+        <Route
+          path="new-article"
+          element={
+            <NotAuthUser user={user}>
+              <CreateArticlePage />
+            </NotAuthUser>
+          }
+        />
+        <Route
+          path="articles/:slug/edit"
+          element={
+            <NotAuthUser user={user}>
+              <EditArticlePage />
             </NotAuthUser>
           }
         />

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IUserRequest, IUserResponse } from '../../../types/user.types';
 import { KataApi } from '../../../api/KataApi';
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { BadResponse } from '../../../types/form.types';
 
 export const registerNewUser = createAsyncThunk<IUserResponse, IUserRequest, { rejectValue: string }>(
@@ -11,6 +11,7 @@ export const registerNewUser = createAsyncThunk<IUserResponse, IUserRequest, { r
       const response = await KataApi.post<IUserResponse>(`users`, body);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.user.token);
 
       return response.data;
     } catch (error) {

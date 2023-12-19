@@ -1,7 +1,7 @@
 .form {
   margin: 0 auto;
   padding: 48px 32px;
-  width: 380px;
+  width: 100%;
   border-radius: 6px;
   border: 1px solid #d9d9d9;
   background-color: #fff;
@@ -33,6 +33,10 @@
   span {
     font-family: Roboto;
     font-size: 14px;
+  }
+  textarea {
+    height: 160px;
+    resize: none;
   }
 }
 .input {
@@ -88,4 +92,18 @@
   color: #f5222d;
   font-family: Roboto;
   font-size: 14px;
+}
+.tagWrapper {
+  max-width: 600px;
+  display: flex;
+}
+.tagInput {
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+.deleteTag {
+  display: flex;
+  column-gap: 20px;
 }

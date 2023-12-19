@@ -6,11 +6,20 @@ import ArticleTags from '../ArticleTags/ArticleTags';
 import ArticleDescr from '../ArticleDescr/ArticleDescr';
 import User from '../User/User';
 
-const ArticleCard: React.FC<IArticle> = ({ author, createdAt, description, favoritesCount, tagList, title, slug }) => {
+const ArticleCard: React.FC<IArticle> = ({
+  author,
+  createdAt,
+  description,
+  favoritesCount,
+  tagList,
+  title,
+  slug,
+  favorited,
+}) => {
   return (
     <div className={s.item}>
       <div className={s.body}>
-        <ArticleHeader favoritesCount={favoritesCount} title={title} slug={slug} />
+        <ArticleHeader favorited={favorited} favoritesCount={favoritesCount} title={title} slug={slug} />
         <ArticleTags tagList={tagList} />
         <ArticleDescr description={description} />
       </div>

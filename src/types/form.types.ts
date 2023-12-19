@@ -5,6 +5,10 @@ export interface IFormData {
   repeatPassword?: string;
   agree?: boolean;
   image?: string;
+  title?: string;
+  description?: string;
+  body?: string;
+  tags?: { name: string }[];
 }
 
 export interface BadResponse {
